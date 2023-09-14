@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# --- macOS ---
+{{ if eq .chezmoi.os "darwin" }}
+{{ end }}
+
+# --- linux-debian ---
+{{ if (and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "debian")) }}
+
+apt-get update
+apt install -y zsh
+chsh -s $(which zsh)
+
+{{ end }}
+

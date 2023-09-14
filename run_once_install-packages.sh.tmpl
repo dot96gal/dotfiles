@@ -8,8 +8,19 @@
 {{ if (and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "debian")) }}
 
 apt-get update
-apt install -y zsh
-chsh -s $(which zsh)
+
+# install zsh
+apt-get install -y zsh
+
+# install starship
+curl -fsSL https://starship.rs/install.sh | sh -s -- --yes
+
+# install sheldon
+curl --proto '=https' -fLsS https://rossmacarthur.github.io/install/crate.sh \
+  | bash -s -- --repo rossmacarthur/sheldon --to ~/.local/bin
+
+# install fzf
+apt-get install -y fzf
 
 {{ end }}
 

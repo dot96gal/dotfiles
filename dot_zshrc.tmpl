@@ -1,0 +1,72 @@
+# vim mode
+bindkey -v
+
+# history
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt hist_ignore_all_dups
+setopt hist_ignore_dups
+setopt hist_ignore_space
+setopt inc_append_history
+setopt share_history
+
+# path
+export PATH=$HOME/.local/bin:$PATH
+
+# lang
+export LANG=ja_JP.UTF-8
+
+# editor
+export EDITOR='nvim'
+export VISUAL='nvim'
+
+{{ if eq .chezmoi.os "darwin" }}
+# ssh-agent(1password)
+export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
+{{ end }}
+
+# nvim
+alias vi="nvim"
+alias vim="nvim"
+
+# ls
+alias ls='ls -GF'
+
+# colors
+autoload -Uz colors
+colors
+
+{{ if eq .chezmoi.os "darwin" }}
+# homebrew
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# anyenv
+eval "$(anyenv init -)"
+{{ end }}
+
+# starship
+eval "$(starship init zsh)"
+
+# sheldon
+eval "$(sheldon source)"
+
+{{ if eq .chezmoi.os "darwin" }}
+# zsh-completions
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+
+  autoload -Uz compinit
+  compinit
+fi
+{{ end }}
+
+# fzf
+function fzf-select-history() {
+  BUFFER=$(history -n -r 1 | fzf --query "$LBUFFER")
+  CURSOR=$#BUFFER
+  zle reset-prompt
+}
+zle -N fzf-select-history
+bindkey '^r' fzf-select-history
+

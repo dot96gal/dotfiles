@@ -2,3 +2,12 @@
 /.gitignore
 /install.sh
 
+{{ if eq (env "REMOTE_CONTAINERS") "true" }}
+# use vscode devcontainer plugin: copy git config
+/.gitconfig
+
+# use only on local
+/.ssh/config
+/.ssh/allowed_signers
+{{ end }}
+

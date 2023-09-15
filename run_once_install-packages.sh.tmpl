@@ -2,6 +2,29 @@
 
 # --- macOS ---
 {{ if eq .chezmoi.os "darwin" }}
+
+# install zsh
+brew install zsh
+brew install zsh-completions
+
+# install git
+brew install git
+
+# install neovim
+brew install neovim
+
+# install ghq
+brew install ghq
+
+# install starship
+brew install starship
+
+# install sheldon
+brew install sheldon
+
+# install fzf
+brew install fzf
+
 {{ end }}
 
 # --- linux-debian ---
@@ -9,11 +32,17 @@
 
 apt-get update
 
-# install locale-all
+# install locales
 apt-get install -y locales-all
 
 # install zsh
 apt-get install -y zsh
+
+# install git
+apt-get install -y git
+
+# install neovim
+apt-get install -y neovim
 
 # install starship
 curl -fsSL https://starship.rs/install.sh | sh -s -- --yes

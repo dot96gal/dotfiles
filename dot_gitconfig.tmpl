@@ -1,0 +1,33 @@
+[user]
+	name = dot96gal
+	email = {{ (onepasswordDetailsFields "ilr5g4dbb4uoe2q6iflo2aiaym").username.value }}
+	signingkey = {{ (onepasswordDetailsFields "6qr465ypcghcqb7us3rucneweq").public_key.value }}
+
+[core]
+	editor = vim
+
+[alias]
+	br = branch
+	cm = commit
+	co = checkout
+	st = status
+	sw = switch
+
+[init]
+	defaultBranch = main
+
+[gpg]
+	format = ssh
+
+[gpg "ssh"]
+	# use SSH_AUTH_SOCK: omit op-ssh-sign
+	# see also: https://1password.community/discussion/133589/ssh-commit-signing-inside-docker
+	# program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+	allowedSignersFile = ~/.ssh/allowed_signers
+
+[commit]
+	gpgsign = true
+
+[ghq]
+	root = ~/ghq
+

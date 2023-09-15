@@ -70,6 +70,22 @@ function fzf-select-history() {
 zle -N fzf-select-history
 bindkey '^r' fzf-select-history
 
+# fzf: switch-git-branch
+function fzf-switch-git-branch() {
+  target_br=$(
+    git branch -a |
+      fzf --exit-0 --layout=reverse --info=hidden --no-multi --preview-window="right,65%" --prompt="SWITCH BRANCH > " --preview="echo {} | tr -d ' *' | xargs git log --graph --color=always" |
+      head -n 1 |
+      perl -pe "s/\s//g; s/\*//g; s/remotes\/origin\///g"
+  )
+  if [ -n "$target_br" ]; then
+    BUFFER="git switch $target_br"
+    zle accept-line
+  fi
+}
+zle -N fzf-switch-git-branch
+bindkey "^b" fzf-switch-git-branch
+
 {{ if eq .chezmoi.os "darwin" }}
 # fzf: cd-ghq-repo
 function fzf-cd-ghq-repo() {

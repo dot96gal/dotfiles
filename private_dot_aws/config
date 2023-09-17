@@ -1,0 +1,4 @@
+[profile dot96gal]
+region = ap-northeast-1
+output = json
+

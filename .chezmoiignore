@@ -7,6 +7,7 @@
 /.gitconfig
 
 # use only on local
+/.aws/config
 /.ssh/config
 /.ssh/allowed_signers
 {{ end }}

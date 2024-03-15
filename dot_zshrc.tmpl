@@ -14,7 +14,6 @@ setopt share_history
 # path
 export PATH=$HOME/.local/bin:$PATH
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
-export PATH=$PATH:$(go env GOPATH)/bin
 
 # lang
 export LANG=ja_JP.UTF-8
@@ -49,6 +48,10 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # asdf
 . $(brew --prefix asdf)/libexec/asdf.sh
 {{ end }}
+
+# golang
+export PATH=$PATH:$(go env GOBIN)
+export PATH=$PATH:$(go env GOPATH)/bin
 
 # starship
 eval "$(starship init zsh)"

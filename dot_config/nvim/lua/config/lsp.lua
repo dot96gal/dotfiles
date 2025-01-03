@@ -7,6 +7,7 @@ require("mason-lspconfig").setup({
     "lua_ls",
     "pyright",
     "ruff",
+    "zls",
   },
   automatic_installation = true,
 })

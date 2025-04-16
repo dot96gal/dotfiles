@@ -1,3 +1,3 @@
 require("monokai").setup({
-	palette = require("monokai"),
+  palette = require("monokai"),
 })

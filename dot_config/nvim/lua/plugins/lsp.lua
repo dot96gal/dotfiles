@@ -67,4 +67,13 @@ return {
       require("copilot_cmp").setup()
     end,
   },
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    dependencies = {
+      { "github/copilot.vim" },
+      { "nvim-lua/plenary.nvim", branch = "master" },
+    },
+    build = "make tiktoken",
+    opts = {},
+  },
 }

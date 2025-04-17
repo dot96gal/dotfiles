@@ -123,3 +123,14 @@ cmp.setup({
     end),
   },
 })
+
+-- copilot chat
+require("CopilotChat").setup({
+  show_help = true,
+  prompts = {
+    Explain = {
+      prompt = "/COPILOT_EXPLAIN コードを日本語で説明してください",
+      description = "コードの説明をお願いする",
+    },
+  },
+})

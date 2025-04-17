@@ -1,36 +1,30 @@
 -- lsp
 require("mason").setup()
 
+local ensure_installed = {
+  "gopls",
+  "lua_ls",
+  "pyright",
+  "ruff",
+  "zls",
+}
+
 require("mason-lspconfig").setup({
-  ensure_installed = {
-    "gopls",
-    "lua_ls",
-    "pyright",
-    "ruff",
-    "zls",
-  },
   automatic_installation = true,
+  ensure_installed = ensure_installed,
 })
 
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
-require("mason-lspconfig").setup_handlers({
-  function(server_name)
-    require("lspconfig")[server_name].setup({
-      capabilities = capabilities,
-    })
-  end,
-})
-
--- lsp (lua)
-require("lspconfig").lua_ls.setup({
+vim.lsp.config("lua_ls", {
   settings = {
     Lua = {
       diagnostics = {
+        globals = { "vim" },
         disable = { "missing-fields" },
       },
     },
   },
 })
+vim.lsp.enable(ensure_installed)
 
 -- formatter
 local null_ls = require("null-ls")

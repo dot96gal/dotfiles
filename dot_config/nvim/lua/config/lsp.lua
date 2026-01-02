@@ -1,6 +1,4 @@
 -- lsp
-require("mason").setup()
-
 local ensure_installed = {
   "gopls",
   "lua_ls",
@@ -9,56 +7,64 @@ local ensure_installed = {
   "zls",
 }
 
+require("mason").setup()
+
 require("mason-lspconfig").setup({
   ensure_installed = ensure_installed,
 })
 
-vim.lsp.config("lua_ls", {
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { "vim" },
-        disable = { "missing-fields" },
-      },
-    },
-  },
-})
 vim.lsp.enable(ensure_installed)
 
 -- formatter
-local null_ls = require("null-ls")
-local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-null_ls.setup({
-  sources = {
-    null_ls.builtins.diagnostics.golangci_lint,
-    null_ls.builtins.formatting.gofmt,
-    null_ls.builtins.formatting.stylua,
-  },
-  -- format on save (null-ls)
-  on_attach = function(client, bufnr)
-    if client.supports_method("textDocument/formatting") then
-      vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("my.lsp", {}),
+  callback = function(args)
+    local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+    local buf = args.buf
+
+    if client:supports_method("textDocument/definition") then
+      vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = buf, desc = "Go to definition" })
+    end
+
+    if client:supports_method("textDocument/hover") then
+      vim.keymap.set("n", "<leader>k",
+        function() vim.lsp.buf.hover({ border = "single" }) end,
+        { buffer = buf, desc = "Show hover documentation" })
+    end
+
+    if client:supports_method("textDocument/completion") then
+      vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = false})
+    end
+
+    -- Auto-format ("lint") on save.
+    -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
+    if not client:supports_method("textDocument/willSaveWaitUntil")
+        and client:supports_method("textDocument/formatting") then
       vim.api.nvim_create_autocmd("BufWritePre", {
-        group = augroup,
-        buffer = bufnr,
+        group = vim.api.nvim_create_augroup("my.lsp", { clear = false }),
+        buffer = args.buf,
         callback = function()
-          vim.lsp.buf.format({ async = false })
+          vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
         end,
       })
     end
-  end,
-})
 
--- format on save (lsp)
-vim.api.nvim_create_autocmd("LspAttach", {
-  group = vim.api.nvim_create_augroup("lsp", { clear = true }),
-  callback = function(args)
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      buffer = args.buf,
-      callback = function()
-        vim.lsp.buf.format({ async = false, id = args.data.client_id })
-      end,
-    })
+    if client:supports_method("textDocument/inlineCompletion") then
+      vim.lsp.inline_completion.enable(true, { bufnr = buf })
+      vim.keymap.set("i", "<Tab>", function()
+        if not vim.lsp.inline_completion.get() then
+          return "<Tab>"
+        end
+        -- close the completion popup if it's open
+        if vim.fn.pumvisible() == 1 then
+          return "<C-e>"
+        end
+      end, {
+        expr = true,
+        buffer = buf,
+        desc = "Accept the current inline completion",
+      })
+    end
   end,
 })
 

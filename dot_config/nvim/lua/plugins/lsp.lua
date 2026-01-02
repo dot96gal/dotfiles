@@ -2,6 +2,7 @@ return {
   -- lsp
   {
     "neovim/nvim-lspconfig",
+    event = { "BufReadPre", "BufNewFile" },
   },
   {
     "mason-org/mason.nvim",
@@ -31,21 +32,6 @@ return {
   {
     "saadparwaiz1/cmp_luasnip",
     dependencies = { "L3MON4D3/LuaSnip" },
-  },
-  -- formatter
-  {
-    "nvimtools/none-ls.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-  },
-  -- lua
-  {
-    "folke/lazydev.nvim",
-    ft = "lua",
-    opts = {
-      library = {
-        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-      },
-    },
   },
   -- comment
   {

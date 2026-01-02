@@ -49,31 +49,4 @@ return {
     "numToStr/Comment.nvim",
     opts = {},
   },
-  -- copilot
-  {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    config = function()
-      require("copilot").setup({
-        suggestion = { enabled = false },
-        panel = { enabled = false },
-        copilot_node_command = "node",
-      })
-    end,
-  },
-  {
-    "zbirenbaum/copilot-cmp",
-    config = function()
-      require("copilot_cmp").setup()
-    end,
-  },
-  {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    dependencies = {
-      { "github/copilot.vim" },
-      { "nvim-lua/plenary.nvim", branch = "master" },
-    },
-    build = "make tiktoken",
-    opts = {},
-  },
 }

@@ -46,6 +46,9 @@ colors
 # homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+# git-wt
+eval "$(git wt --init zsh)"
+
 # mise
 eval "$(/opt/homebrew/bin/mise activate zsh)"
 {{ end }}
@@ -94,6 +97,17 @@ function fzf-switch-git-branch() {
 }
 zle -N fzf-switch-git-branch
 bindkey "^b" fzf-switch-git-branch
+
+# fzf: switch-git-worktree
+function fzf-switch-git-worktree() {
+  target_wt=$(git wt | tail -n +2 | fzf | awk '{print $(NF-1)}')
+  if [ -n "$target_wt" ]; then
+    BUFFER="git wt $target_wt"
+    zle accept-line
+  fi
+}
+zle -N fzf-switch-git-worktree
+bindkey "^w" fzf-switch-git-worktree
 
 {{ if eq .chezmoi.os "darwin" }}
 # fzf: cd-ghq-repo
